@@ -12,14 +12,14 @@ infinite-fibre square forces all four blocks to be Hadamard.
 
 namespace Hadamard6
 
-variable {IsTao IsKarlsson : Mat6 → Prop}
+variable {IsKarlsson : Mat6 → Prop}
 
-theorem blockSwap_from_published_inputs
-    (pub : PublishedInputs IsTao IsKarlsson) :
+theorem blockSwap_from_twoByTwo_input
+    (htwo : TwoByTwoKarlssonCriterion IsKarlsson) :
     ∀ H, IsHadamard H → ¬ IsKarlsson H →
       HasFiniteCorner H ∨ AllFourBlocksHadamard H := by
   intro H hH hK
-  rcases all_four_blocks_det_ne_zero pub hH hK with
+  rcases all_four_blocks_det_ne_zero htwo hH hK with
     ⟨hdetE, hdetB, hdetC, hdetD⟩
   let BRow := normalizedRowGramFibre
     (Matrix.toBlocks₁₂ H * Matrix.conjTranspose (Matrix.toBlocks₁₂ H))
@@ -36,7 +36,7 @@ theorem blockSwap_from_published_inputs
   by_cases hAtE : BRow.Infinite ∨ CCol.Infinite
   · by_cases hAtB : ERow.Infinite ∨ DCol.Infinite
     · by_cases hAtC : ECol.Infinite ∨ DRow.Infinite
-      · exact Or.inr (infinite_fibre_block_square_forces_allFour pub hH hK
+      · exact Or.inr (infinite_fibre_block_square_forces_allFour htwo hH hK
           (by simpa [BRow, CCol] using hAtE)
           (by simpa [ERow, DCol] using hAtB)
           (by simpa [ECol, DRow] using hAtC))

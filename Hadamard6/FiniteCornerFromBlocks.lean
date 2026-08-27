@@ -1,5 +1,6 @@
-import Hadamard6.BlockFibreOutcome
+import Hadamard6.BlockGram
 import Hadamard6.BlockCompletion
+import Hadamard6.Strata
 
 /-!
 # Recovering a finite corner from a dephased block presentation

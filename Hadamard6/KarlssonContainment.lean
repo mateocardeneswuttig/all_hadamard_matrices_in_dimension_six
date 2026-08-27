@@ -1,4 +1,5 @@
 import Hadamard6.FourierSeamCertificate
+import Hadamard6.IntrinsicKarlssonSeam
 import Hadamard6.KarlssonGlobalModel
 import Hadamard6.KarlssonParametrizationStatement
 
@@ -8,11 +9,8 @@ import Hadamard6.KarlssonParametrizationStatement
 This module mirrors the two-chart proof in the paper.  The regular chart is
 closed internally by `KarlssonMixedBlocks.lean`.  The affine-Fourier seam is
 closed internally by the kernel certificate in `FourierSeamCertificate.lean`.
-The reciprocal half-angle equivalence and the treatment of singly degenerate
-Möbius curves are also checked internally.  This assembly lemma consumes the
-full raw-or-seam statement; the paper-facing theorem derives that statement
-from the intrinsic `H₂` calculation plus only a residual seam-identification
-input.
+The reciprocal half-angle equivalence, singly degenerate Möbius curves, and
+the residual affine-Fourier seams are also checked internally.
 -/
 
 namespace Hadamard6
@@ -83,10 +81,9 @@ theorem canonicalKarlssonRawPresentation_mem_finiteCornerAtlas
 /-- Full intrinsic Karlsson containment, assembled in the same regular/seam
 case split as the paper. -/
 theorem hasHadamardTwoByTwo_mem_finiteCornerAtlas
-    (hkarlsson : KarlssonRawOrSeamCoverage)
     {H : Mat6} (hH : IsHadamard H)
     (hH₂ : HasHadamardTwoByTwo H) : InFiniteCornerAtlas H := by
-  rcases hkarlsson H hH hH₂ with hraw | hseam
+  rcases karlssonRawOrSeamCoverage_proved H hH hH₂ with hraw | hseam
   · rcases hraw with ⟨q⟩
     exact canonicalKarlssonRawPresentation_mem_finiteCornerAtlas hH q
   · exact affineFourierSeam_mem_finiteCornerAtlas_proved hseam

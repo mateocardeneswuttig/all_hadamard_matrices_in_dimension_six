@@ -7,10 +7,10 @@ import Hadamard6.BlockSwapCore
 
 namespace Hadamard6
 
-variable {IsTao IsKarlsson : Mat6 → Prop}
+variable {IsKarlsson : Mat6 → Prop}
 
 theorem topRight_infinite_gram_fibre_outcome
-    (pub : PublishedInputs IsTao IsKarlsson)
+    (htwo : TwoByTwoKarlssonCriterion IsKarlsson)
     {H : Mat6} (hH : IsHadamard H) {G : Mat3}
     (hgram : Matrix.toBlocks₁₂ H *
       Matrix.conjTranspose (Matrix.toBlocks₁₂ H) = G)
@@ -28,11 +28,11 @@ theorem topRight_infinite_gram_fibre_outcome
     rw [rowTau_normalizeFirstRow hBu] at hneg
     exact hneg
   · right; right
-    exact pub.twoByTwo_mem_karlsson H hH
+    exact htwo H hH
       (normalizedTopRight_opposite_hasHadamardTwoByTwo hH hopp)
 
 theorem topLeft_infinite_gram_fibre_outcome
-    (pub : PublishedInputs IsTao IsKarlsson)
+    (htwo : TwoByTwoKarlssonCriterion IsKarlsson)
     {H : Mat6} (hH : IsHadamard H) {G : Mat3}
     (hgram : Matrix.toBlocks₁₁ H *
       Matrix.conjTranspose (Matrix.toBlocks₁₁ H) = G)
@@ -50,11 +50,11 @@ theorem topLeft_infinite_gram_fibre_outcome
     rw [rowTau_normalizeFirstRow hEu] at hneg
     exact hneg
   · right; right
-    exact pub.twoByTwo_mem_karlsson H hH
+    exact htwo H hH
       (normalizedTopLeft_opposite_hasHadamardTwoByTwo hH hopp)
 
 theorem bottomRight_infinite_column_gram_fibre_outcome
-    (pub : PublishedInputs IsTao IsKarlsson)
+    (htwo : TwoByTwoKarlssonCriterion IsKarlsson)
     {H : Mat6} (hH : IsHadamard H) {G : Mat3}
     (hgram : Matrix.conjTranspose (Matrix.toBlocks₂₂ H) *
       Matrix.toBlocks₂₂ H = G)
@@ -72,11 +72,11 @@ theorem bottomRight_infinite_column_gram_fibre_outcome
     rw [columnTau_normalizeFirstColumn_re hDu] at hneg
     exact hneg
   · right; right
-    exact pub.twoByTwo_mem_karlsson H hH
+    exact htwo H hH
       (normalizedBottomRight_oppositeColumn_hasHadamardTwoByTwo hH hopp)
 
 theorem bottomRight_infinite_row_gram_fibre_outcome
-    (pub : PublishedInputs IsTao IsKarlsson)
+    (htwo : TwoByTwoKarlssonCriterion IsKarlsson)
     {H : Mat6} (hH : IsHadamard H) {G : Mat3}
     (hgram : Matrix.toBlocks₂₂ H *
       Matrix.conjTranspose (Matrix.toBlocks₂₂ H) = G)
@@ -94,11 +94,11 @@ theorem bottomRight_infinite_row_gram_fibre_outcome
     rw [rowTau_normalizeFirstRow hDu] at hneg
     exact hneg
   · right; right
-    exact pub.twoByTwo_mem_karlsson H hH
+    exact htwo H hH
       (normalizedBottomRight_oppositeRow_hasHadamardTwoByTwo hH hopp)
 
 theorem bottomLeft_infinite_column_gram_fibre_outcome
-    (pub : PublishedInputs IsTao IsKarlsson)
+    (htwo : TwoByTwoKarlssonCriterion IsKarlsson)
     {H : Mat6} (hH : IsHadamard H) {G : Mat3}
     (hgram : Matrix.conjTranspose (Matrix.toBlocks₂₁ H) *
       Matrix.toBlocks₂₁ H = G)
@@ -116,11 +116,11 @@ theorem bottomLeft_infinite_column_gram_fibre_outcome
     rw [columnTau_normalizeFirstColumn_re hCu] at hneg
     exact hneg
   · right; right
-    exact pub.twoByTwo_mem_karlsson H hH
+    exact htwo H hH
       (normalizedBottomLeft_oppositeColumn_hasHadamardTwoByTwo hH hopp)
 
 theorem topLeft_infinite_column_gram_fibre_outcome
-    (pub : PublishedInputs IsTao IsKarlsson)
+    (htwo : TwoByTwoKarlssonCriterion IsKarlsson)
     {H : Mat6} (hH : IsHadamard H) {G : Mat3}
     (hgram : Matrix.conjTranspose (Matrix.toBlocks₁₁ H) *
       Matrix.toBlocks₁₁ H = G)
@@ -138,7 +138,7 @@ theorem topLeft_infinite_column_gram_fibre_outcome
     rw [columnTau_normalizeFirstColumn_re hEu] at hneg
     exact hneg
   · right; right
-    exact pub.twoByTwo_mem_karlsson H hH
+    exact htwo H hH
       (normalizedTopLeft_oppositeColumn_hasHadamardTwoByTwo hH hopp)
 
 end Hadamard6

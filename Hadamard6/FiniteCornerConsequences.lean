@@ -1,38 +1,36 @@
 import Hadamard6.BlockCompletion
-import Hadamard6.PublishedInputs
 import Hadamard6.VanishingMinorReduction
 
 /-!
-# Immediate consequences of the published inputs
+# Finite-corner soundness and block invertibility
+
+These are the two direct consequences used by the public classification and
+the block-swap argument.
 -/
 
 namespace Hadamard6
 
-variable {IsTao IsKarlsson : Mat6 → Prop}
+variable {IsKarlsson : Mat6 → Prop}
 
-/-- Every retained completion is Hadamard; both entrywise unimodularity and
-the full Gram identity are now checked locally. -/
+/-- Every retained completion is Hadamard. -/
 theorem retained_completion_isHadamard
     {p : CornerData} {B C : Mat3}
     (h : Retained p.matrix B C) :
-    IsHadamard (completion p.matrix B C) := by
-  exact ⟨retained_completion_entrywiseUnit h,
+    IsHadamard (completion p.matrix B C) :=
+  ⟨retained_completion_entrywiseUnit h,
     retained_completion_rowGram h⟩
 
-/-- Soundness of the intrinsic atlas definition: every retained output, and
-therefore every equivalent representative of it, is Hadamard. -/
+/-- Every matrix represented by the finite-corner atlas is Hadamard. -/
 theorem inFiniteCornerAtlas_isHadamard {H : Mat6}
-    (hH : InFiniteCornerAtlas H) :
-    IsHadamard H := by
+    (hH : InFiniteCornerAtlas H) : IsHadamard H := by
   rcases hH with ⟨p, B, C, hret, heq⟩
   exact (equivalent_isHadamard_iff heq).2
     (retained_completion_isHadamard hret)
 
-/-- In particular, all four blocks of the fixed `3+3` decomposition are
-invertible outside Karlsson.  This now follows locally from the corner
-singularity reduction and the sole Karlsson completeness input. -/
+/-- Outside the intrinsic Karlsson sector, all four blocks of the fixed
+`3 + 3` decomposition are invertible. -/
 theorem all_four_blocks_det_ne_zero
-    (pub : PublishedInputs IsTao IsKarlsson)
+    (htwo : TwoByTwoKarlssonCriterion IsKarlsson)
     {H : Mat6} (hH : IsHadamard H) (hK : ¬ IsKarlsson H) :
     Matrix.det (Matrix.toBlocks₁₁ H) ≠ 0 ∧
     Matrix.det (Matrix.toBlocks₁₂ H) ≠ 0 ∧
@@ -40,16 +38,16 @@ theorem all_four_blocks_det_ne_zero
     Matrix.det (Matrix.toBlocks₂₂ H) ≠ 0 := by
   refine ⟨?_, ?_, ?_, ?_⟩
   · intro hzero
-    exact hK (pub.twoByTwo_mem_karlsson H hH
+    exact hK (htwo H hH
       (singular_topLeft_hasHadamardTwoByTwo hH hzero))
   · intro hzero
-    exact hK (pub.twoByTwo_mem_karlsson H hH
+    exact hK (htwo H hH
       (singular_topRight_hasHadamardTwoByTwo hH hzero))
   · intro hzero
-    exact hK (pub.twoByTwo_mem_karlsson H hH
+    exact hK (htwo H hH
       (singular_bottomLeft_hasHadamardTwoByTwo hH hzero))
   · intro hzero
-    exact hK (pub.twoByTwo_mem_karlsson H hH
+    exact hK (htwo H hH
       (singular_bottomRight_hasHadamardTwoByTwo hH hzero))
 
 end Hadamard6

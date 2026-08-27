@@ -1,4 +1,5 @@
 import Hadamard6.BlockNormalization
+import Hadamard6.BlockOppositePair
 
 /-!
 # Opposite pairs after intrinsic block normalization

@@ -1,5 +1,5 @@
 import Hadamard6.BlockFibreNormalizedOutcome
-import Hadamard6.PublishedConsequences
+import Hadamard6.FiniteCornerConsequences
 
 /-!
 # The complete infinite-fibre block square
@@ -12,10 +12,10 @@ lemmas exclude both choices unless all four blocks are Hadamard.
 
 namespace Hadamard6
 
-variable {IsTao IsKarlsson : Mat6 → Prop}
+variable {IsKarlsson : Mat6 → Prop}
 
 theorem infinite_fibre_block_square_forces_allFour
-    (pub : PublishedInputs IsTao IsKarlsson)
+    (htwo : TwoByTwoKarlssonCriterion IsKarlsson)
     {H : Mat6} (hH : IsHadamard H) (hK : ¬ IsKarlsson H)
     (hAtE :
       (normalizedRowGramFibre
@@ -39,25 +39,25 @@ theorem infinite_fibre_block_square_forces_allFour
         (Matrix.toBlocks₂₂ H *
           Matrix.conjTranspose (Matrix.toBlocks₂₂ H))).Infinite) :
     AllFourBlocksHadamard H := by
-  rcases all_four_blocks_det_ne_zero pub hH hK with
+  rcases all_four_blocks_det_ne_zero htwo hH hK with
     ⟨hdetE, hdetB, hdetC, hdetD⟩
   rcases hAtE with hBinf | hCinf
-  · have hBout := topRight_infinite_gram_fibre_outcome pub hH rfl hBinf hdetB
+  · have hBout := topRight_infinite_gram_fibre_outcome htwo hH rfl hBinf hdetB
     rcases hAtB with hEinf | hDinf
-    · have hEout := topLeft_infinite_gram_fibre_outcome pub hH rfl hEinf hdetE
+    · have hEout := topLeft_infinite_gram_fibre_outcome htwo hH rfl hEinf hdetE
       exact two_horizontal_outcomes_force_allFour IsKarlsson hH hK hBout hEout
     · have hDout := bottomRight_infinite_column_gram_fibre_outcome
-        pub hH rfl hDinf hdetD
+        htwo hH rfl hDinf hdetD
       exact horizontal_and_opposite_vertical_outcomes_force_allFour
         IsKarlsson hH hK hBout hDout
   · have hCout := bottomLeft_infinite_column_gram_fibre_outcome
-      pub hH rfl hCinf hdetC
+      htwo hH rfl hCinf hdetC
     rcases hAtC with hEinf | hDinf
     · have hEout := topLeft_infinite_column_gram_fibre_outcome
-        pub hH rfl hEinf hdetE
+        htwo hH rfl hEinf hdetE
       exact two_vertical_outcomes_force_allFour IsKarlsson hH hK hCout hEout
     · have hDout := bottomRight_infinite_row_gram_fibre_outcome
-        pub hH rfl hDinf hdetD
+        htwo hH rfl hDinf hdetD
       exact vertical_and_opposite_horizontal_outcomes_force_allFour
         IsKarlsson hH hK hCout hDout
 

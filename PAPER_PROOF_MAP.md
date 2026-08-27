@@ -3,17 +3,17 @@
 The authoritative endpoint is `Hadamard6/PaperTheorem.lean`.  Read its
 theorems from top to bottom; they deliberately match the manuscript order.
 
-| Manuscript statement | Manuscript label | Lean theorem | External input at this step |
+| Manuscript statement | Manuscript label | Lean theorem | Status in Lean |
 |---|---|---|---|
-| Absence of every finite-corner witness forces Karlsson or Tao | `thm:finitecornerintro` (typeset as a proposition) | `paper_failed_corner_search_forces_karlsson_or_tao` | cubic-root criterion |
-| Every Karlsson class has a finite corner | `prop:karlsson-finite-corner` | `paper_karlsson_has_finite_corner` | complete published `H₂`--Karlsson raw-or-seam parametrization |
-| Tao has a finite corner | `prop:tao-finite-corner` | `paper_tao_has_finite_corner` | none |
-| Every order-six Hadamard matrix has a finite corner | `thm:classification` | `paper_finite_corner_theorem` | the two interfaces above |
-| Non-Tao, non-Karlsson completed-output recovery | intermediate consequence used before `prop:historical-output-identification` | `paper_nonexceptional_completed_dilation_recovery` | cubic-root criterion only |
-| Every Hadamard lies in the retained output | proof of `cor:atlas-classification` | `paper_finite_corner_completeness` | the two interfaces above |
-| Every retained output is Hadamard | `prop:algorithmvalid` | `paper_finite_corner_soundness` | none |
-| Matrix-level two-sided equality | `cor:atlas-classification` before quotienting | `paper_total_output_corollary` | the two interfaces above |
-| Equality on equivalence classes | `cor:atlas-classification` | `paper_classification_corollary` | the two interfaces above |
+| Absence of every finite-corner witness forces Karlsson or Tao | `thm:finitecornerintro` (typeset as a proposition) | `paper_failed_corner_search_forces_karlsson_or_tao` | proved internally |
+| Every Karlsson class has a finite corner | `prop:karlsson-finite-corner` | `paper_karlsson_has_finite_corner` | proved internally from intrinsic `H₂` normalization and exact seam equivalences |
+| Tao has a finite corner | `prop:tao-finite-corner` | `paper_tao_has_finite_corner` | proved internally |
+| Every order-six Hadamard matrix has a finite corner | `thm:classification` | `paper_finite_corner_theorem` | proved internally |
+| Non-Tao, non-Karlsson completed-output recovery | intermediate consequence used before `prop:historical-output-identification` | `paper_nonexceptional_completed_dilation_recovery` | proved internally |
+| Every Hadamard lies in the retained output | proof of `cor:atlas-classification` | `paper_finite_corner_completeness` | proved internally |
+| Every retained output is Hadamard | `prop:algorithmvalid` | `paper_finite_corner_soundness` | proved internally |
+| Matrix-level two-sided equality | `cor:atlas-classification` before quotienting | `paper_total_output_corollary` | proved internally |
+| Equality on equivalence classes | `cor:atlas-classification` | `paper_classification_corollary` | proved internally |
 
 The manuscript's source key for the failed-search proposition begins with
 `thm:` although the statement is typeset as a proposition. The table records
@@ -28,12 +28,12 @@ the literal key so references can be audited mechanically.
 | Singular-corner reduction | `VanishingMinorReduction.lean` |
 | Fixed-Gram fibre trichotomy | `CandidateFibre.lean`, `InfiniteFibre*.lean`, `Dependent*.lean` |
 | Complementary-block routing | `BlockSwap*.lean`, `Classification.lean` |
-| Fourier-block closure | `Fourier*.lean`, `SimultaneousFourierNormalization.lean` |
+| Fourier-block closure and cubic classification | `Fourier*.lean`, `SimultaneousFourierNormalization.lean`, `FourierCubic*.lean`, `FourierNormalizationClassification.lean` |
 | Tao witness | `TaoOrbit.lean`, `TaoAtlas.lean` |
 | Intrinsic Karlsson normalization and coordinate extraction | `H2CanonicalForm.lean`, `H2BlockNormalization.lean`, `H2DegenerateNormalization.lean`, `H2KarlssonParametrization.lean` |
 | Karlsson raw coordinates and reciprocal orientation | `KarlssonGlobalModel.lean`, `KarlssonChartBoundary.lean` |
 | Karlsson regular chart | `KarlssonMixedBlocks.lean` and its certificate imports |
-| Karlsson affine-Fourier seam | `KarlssonFourierSeam.lean`, `FourierSeamCertificate.lean` |
+| Karlsson affine-Fourier seam | `KarlssonFourierSeam.lean`, `FourierSeamCertificate*.lean`, `H2ExceptionalSeam*.lean`, `IntrinsicKarlssonSeam.lean` |
 | Public recombination | `PaperTheorem.lean` |
 
 The two generated arithmetic modules are deliberately terminal backends, not
@@ -49,10 +49,11 @@ formal vocabulary uses `InFiniteCornerAtlas` throughout.  The paper's
 separate construction-level identification with the nonexceptional output of Construction 3.1 is not
 encoded as a definitional alias.
 
-The modules beginning `H2...` provide a deeper internal derivation of
-Karlsson's normalization and canonical raw chart. The public theorem does not
-need to identify their final exceptional cores: it takes the complete
-published raw-or-seam parametrization directly, matching Proposition 7(1).
+The modules beginning `H2...` derive Karlsson's intrinsic normalization and
+canonical raw chart.  They reduce the final exceptional cores to explicit
+finite cases; `H2ExceptionalSeam*.lean` identifies those cases with the
+affine-Fourier seam, and `IntrinsicKarlssonSeam.lean` assembles the resulting
+unconditional raw-or-seam coverage theorem.
 
 ## Deliberate formal boundary
 

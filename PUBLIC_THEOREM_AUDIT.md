@@ -7,7 +7,7 @@ uses the same contradiction structure as the manuscript:
 
 ```text
 assume hfailed : not HasFiniteCorner H
-paper_failed_corner_search_forces_karlsson_or_tao hcubic hH hfailed
+paper_failed_corner_search_forces_karlsson_or_tao hH hfailed
   : IsKarlssonConcrete H ∨ IsTaoOrbit H
 
 Karlsson branch -> paper_karlsson_has_finite_corner -> contradiction
@@ -32,22 +32,23 @@ doing any logical work in the witness theorem.
 
 None is an opaque family placeholder.
 
-## Exact assumption flow
+## Exact proof flow
 
-`PublishedCubicRootCriterion` enters only where the Fourier calculation has
-already produced a noninitial cubic-root row and column. Its conclusion is
-stated exactly as Tao or `IsKarlssonConcrete`, matching the two sectors named
-in the manuscript.
+Lean reduces the cubic-root row-and-column branch to the simultaneous Fourier
+normal form and checks its finite cubic phase table explicitly, obtaining
+exactly Tao or `IsKarlssonConcrete`.
 
-`KarlssonRawOrSeamCoverage` is the concrete coordinate form of the published
-complete `H₂`--Karlsson parametrization. It says that an `H₂`-reducible
-Hadamard has either a canonical raw Karlsson presentation or an
-affine-Fourier seam presentation. Lean then checks the reciprocal orientation,
-selection of nonzero `M₊`, and the finite-corner certificates for both pieces.
+For the Karlsson branch, Lean intrinsically normalizes an `H₂`-reducible
+Hadamard into canonical raw coordinates or five explicit exceptional
+residues. It proves the reciprocal orientation and selection of nonzero
+`M₊`, verifies the regular raw finite-corner certificate, and proves exact
+equivalences carrying every exceptional residue to an affine-Fourier seam.
+The resulting theorem `karlssonRawOrSeamCoverage_proved` is consumed
+internally; it is not an argument of a public theorem.
 
 The theorem `paper_nonexceptional_completed_dilation_recovery` excludes Karlsson and
 Tao in its hypotheses, so the routing disjunction closes it without the
-Karlsson coverage input.  It deliberately does not call this predicate
+Karlsson finite-corner theorem. It deliberately does not call this predicate
 `G_6^(4)`: the manuscript's separate construction-level output-identification
 proposition is what converts completed-output recovery into the three-sector
 conjecture.
@@ -67,7 +68,7 @@ native-decision shortcuts. The thousands figure shown by Lake is its
 scheduler count including Mathlib, not a count of assumptions or bespoke
 classification lemmas.
 
-The axiom report concerns kernel dependencies. The cubic-root criterion and
-complete Karlsson parametrization remain explicit arguments of the displayed
-theorems, so a clean axiom report is not presented as an unconditional proof
-of those two historical inputs.
+The public theorem signatures contain no literature-facing theorem
+parameters. Accordingly, the clean source and axiom reports audit an
+unconditional Lean derivation of the paper-facing finite-corner
+classification from the concrete definitions in this repository.

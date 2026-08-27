@@ -1,4 +1,5 @@
-import Hadamard6.FourierBlocks
+import Hadamard6.CubicRoots
+import Hadamard6.Blocks
 
 /-!
 # The finite allocation in the Fourier-block chart
@@ -177,30 +178,5 @@ structure FourierChart (H : Mat6) where
 
 def FourierChartReduction : Prop :=
   ∀ H, IsHadamard H → AllFourBlocksHadamard H → Nonempty (FourierChart H)
-
-theorem fourierBlockAlgebra_of_chart
-    (hchart : FourierChartReduction) : FourierBlockAlgebra := by
-  refine ⟨?_⟩
-  intro H hH hfour
-  rcases hchart H hH hfour with ⟨ch⟩
-  rcases mul_eq_zero.mp ch.factor₁ with hα₁ | hA₁
-  · rcases mul_eq_zero.mp ch.factor₂ with hα₂ | hA₂
-    · exact Or.inl (ch.twoByTwo_of_α_zero hα₁ hα₂)
-    · right
-      rcases A₂_zero_parameters_cubic ch.ω_unit ch.ω_cubic
-        ch.p_unit ch.q_unit ch.A₂_formula hA₂ with ⟨hp, hq⟩
-      rcases α₁_zero_parameters_cubic ch.ω_unit ch.ω_cubic
-        ch.r_unit ch.s_unit ch.α₁_formula hα₁ with ⟨hr, hs⟩
-      exact ⟨ch.K, ch.hK, ch.equivalent,
-        ch.cubic_of_parameters hp hq hr hs⟩
-  · rcases mul_eq_zero.mp ch.factor₂ with hα₂ | hA₂
-    · right
-      rcases A₁_zero_parameters_cubic ch.ω_unit ch.ω_cubic
-        ch.p_unit ch.q_unit ch.A₁_formula hA₁ with ⟨hp, hq⟩
-      rcases α₂_zero_parameters_cubic ch.ω_unit ch.ω_cubic
-        ch.r_unit ch.s_unit ch.α₂_formula hα₂ with ⟨hr, hs⟩
-      exact ⟨ch.K, ch.hK, ch.equivalent,
-        ch.cubic_of_parameters hp hq hr hs⟩
-    · exact Or.inl (ch.twoByTwo_of_A_zero hA₁ hA₂)
 
 end Hadamard6
