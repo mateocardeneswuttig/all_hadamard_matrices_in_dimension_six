@@ -6,7 +6,7 @@ history of the exploratory computation.
 
 | Paper claim | Status | Verification source |
 |---|---|---|
-| Complete finite-corner classification (Theorem 6) | Exact, conditional only on the two published structural inputs displayed in Proposition 7 | Printed proof and `Hadamard6/PaperTheorem.lean` |
+| Complete finite-corner classification (Theorem 6) | Exact and unconditional | Printed proof and `Hadamard6/PaperTheorem.lean` |
 | Soundness and exact retained output | Exact | Printed direct-completion proof and Lean |
 | Karlsson finite-corner coverage | Exact | Printed reduction; generated resultant and Bernstein identities are kernel checked in Lean |
 | Tao finite-corner witness | Exact | Printed calculation and Lean |
@@ -25,12 +25,12 @@ history of the exploratory computation.
 
 ## Lean boundary
 
-Lean is used only for the classification. Its public endpoint has two visible
-theorem parameters:
-
-1. `PublishedCubicRootCriterion`;
-2. `KarlssonRawOrSeamCoverage`, the concrete coordinate form of the published
-   complete `H_2`--Karlsson parametrization.
+Lean is used only for the classification. Its public endpoint has no
+literature-facing theorem parameter. The cubic Fourier branch is classified
+internally by an explicit finite proof. The `H₂` branch is normalized
+intrinsically into regular Karlsson coordinates or explicit exceptional
+residues; exact equivalences identify all residues with the affine-Fourier
+seam, and the regular and seam finite-corner certificates are checked in Lean.
 
 The post-classification product geometry is deliberately absent from the Lean
 dependency graph. It is supported by the smaller exact and interval

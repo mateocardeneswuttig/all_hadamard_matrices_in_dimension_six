@@ -1,4 +1,4 @@
-import Hadamard6.BlockFibreOutcome
+import Hadamard6.ColumnFibreSymmetry
 
 /-!
 # Normalizing an individual `3 x 3` block

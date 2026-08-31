@@ -105,11 +105,12 @@ On Windows:
 py -3 audit_public_theorem.py
 ```
 
-A successful run ends with:
+A successful run ends with messages of the following form (the module count
+may increase as the proof is factored into smaller files):
 
 ```text
 PASS Lean source contains no sorry, admit, project axiom/constant, opaque/unsafe declaration, or native_decide
-PASS all 107 Hadamard6 modules are reachable from Hadamard6.lean
+PASS all ... Hadamard6 modules are reachable from Hadamard6.lean
 PASS nine paper-facing axiom reports use only propext, Classical.choice, and Quot.sound
 ALL PUBLIC LEAN SOURCE AND AXIOM CHECKS PASSED
 ```
@@ -118,33 +119,31 @@ The same build and audit run automatically in GitHub Actions.
 
 ## What is proved, and what is assumed
 
-The public theorem is conditional on exactly two literature-facing
-propositions:
-
-1. `PublishedCubicRootCriterion`, the cubic-root row-and-column implication
-   to Tao or the intrinsic Karlsson locus; and
-2. `KarlssonRawOrSeamCoverage`, the concrete coordinate form of the published
-   `H₂`--Karlsson parametrization: every `H₂`-reducible Hadamard has either a
-   canonical Karlsson raw presentation or an affine-Fourier seam presentation.
-
-They are visible theorem parameters, not Lean `axiom` declarations, opaque
-witnesses, or definitions chosen to make the conclusion automatic.  Lean
-proves the complete implication from these stated inputs to the paper-facing
-classification theorem.  In particular, it proves internally:
+The public classification theorem is unconditional: it takes a matrix and a
+proof that the matrix is Hadamard, but no project-specific mathematical
+hypothesis. In particular, Lean proves internally:
 
 - Hadamard equivalence and invariance of the public predicates;
 - the singular-corner reduction and fixed-Gram fibre trichotomy;
 - complementary-block routing and simultaneous Fourier normalization;
+- the explicit finite classification of the simultaneous cubic Fourier
+  normal form into the Tao orbit or the intrinsic `H₂` sector;
 - the exact Tao orbit and its finite-corner witness;
+- intrinsic normalization of every `H₂`-reducible matrix into regular raw
+  Karlsson coordinates or five explicit exceptional residues;
 - finite-corner certificates for the regular Karlsson chart and every
+  affine-Fourier seam;
+- exact equivalences sending all five exceptional `H₂` residues to the
   affine-Fourier seam;
 - forced completion and retained-output soundness;
 - `HasFiniteCorner H <-> InFiniteCornerAtlas H`; and
 - matrix-level and quotient-level two-sided classification equalities.
 
-Lean does not formalize either published parametrization/criterion itself or
-the paper's separate comparison between the nonexceptional finite-corner
-output and Szöllősi's Construction 3.1.
+The proof does not import Karlsson's parametrization as an assumption and does
+not formalize that historical parametrization in its entirety. It instead
+proves exactly the intrinsic normalization, regular-coordinate, and seam
+identities needed by the classification. Lean does not formalize the paper's
+separate construction-level comparison with Szöllősi's Construction 3.1.
 The separate algebraic-atlas geometry is also
 outside the Lean formal boundary. Its retained exact and interval
 calculations are reproducible from [`certificates/`](certificates/README.md).
@@ -162,8 +161,8 @@ statement of this boundary.
 | Singular-corner and fibre analysis | `VanishingMinorReduction.lean`, `CandidateFibre.lean`, `InfiniteFibre*.lean`, `Dependent*.lean` |
 | Block routing and Fourier closure | `BlockSwap*.lean`, `Classification.lean`, `Fourier*.lean`, `SimultaneousFourierNormalization.lean` |
 | Tao branch | `TaoOrbit.lean`, `TaoAtlas.lean` |
-| Intrinsic Karlsson normalization | `H2CanonicalForm.lean`, `H2BlockNormalization.lean`, `H2DegenerateNormalization.lean`, `H2KarlssonParametrization.lean` |
-| Karlsson regular chart and seams | `Karlsson*.lean`, `FourierSeamCertificate.lean` |
+| Intrinsic Karlsson normalization | `H2CanonicalForm.lean`, `H2BlockNormalization.lean`, `H2DegenerateNormalization.lean`, `H2KarlssonParametrization.lean`, `IntrinsicKarlssonSeam.lean` |
+| Karlsson regular chart and seams | `Karlsson*.lean`, `H2ExceptionalSeam*.lean`, `H2RawPairSigns.lean`, `FourierSeamCertificate*.lean` |
 | Post-classification geometry certificates | `certificates/` |
 
 The files are collected under the `Hadamard6` namespace and directory.  The
@@ -175,17 +174,22 @@ Two generated files are exact arithmetic backends rather than extra
 classification layers: `KarlssonResidualCertificate.lean` is a generated
 Bernstein-positivity table and `KarlssonWitnessResultants.lean` contains
 generated resultant identities. Their short consumers are
-`KarlssonResidualGlobal.lean` and `KarlssonMixedBlocks.lean`. The other
-large file, `FourierSeamCertificate.lean`, is a direct, theorem-structured
+`KarlssonResidualGlobal.lean` and `KarlssonMixedBlocks.lean`. The
+affine-Fourier certificate is split across the
+`FourierSeamCertificate*.lean` modules as a direct, theorem-structured
 six-corner calculation rather than a generated table. This
 separation matters when reading the project: start from `PaperTheorem.lean`
 and descend into a certificate backend only when auditing that particular
 arithmetic identity.
 
+The cubic Fourier classification is organized the same way: the short
+consumer is `FourierNormalizationClassification.lean`, while
+`FourierCubicCases*.lean` and `FourierCubicTaoCases*.lean` contain the finite
+exact case certificates. Their length records explicit arithmetic cases, not
+additional hypotheses or alternative classification spines.
+
 For a theorem-by-theorem correspondence with the manuscript, read
-[`PAPER_PROOF_MAP.md`](PAPER_PROOF_MAP.md).  For the exact cubic criterion and
-its formalization status, read
-[`CUBIC_CRITERION_FORMALIZATION.md`](CUBIC_CRITERION_FORMALIZATION.md).
+[`PAPER_PROOF_MAP.md`](PAPER_PROOF_MAP.md).
 
 ## Trust statement
 
@@ -197,6 +201,6 @@ silently remaining in the project. `#print axioms` is run on all nine public
 endpoints and may report only Lean/Mathlib's standard foundations `propext`,
 `Classical.choice`, and `Quot.sound`.
 
-That kernel report checks the Lean proof terms.  It does not erase the two
-explicit literature-facing theorem parameters, and the documentation does
-not claim otherwise.
+The public theorem signatures contain no literature-facing theorem
+parameters. The remaining axioms in the kernel report are precisely the
+standard Lean/Mathlib foundations listed above.

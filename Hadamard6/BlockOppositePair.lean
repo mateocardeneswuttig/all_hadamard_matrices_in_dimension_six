@@ -1,5 +1,5 @@
 import Hadamard6.ColumnFibreSymmetry
-import Hadamard6.PublishedInputs
+import Hadamard6.Strata
 import Mathlib.Tactic.FinCases
 
 /-!
